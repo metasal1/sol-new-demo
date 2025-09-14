@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import { WalletConnection } from "@/components/wallet-connection"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,6 +11,8 @@ import { Loader2 } from "lucide-react"
 
 export function NewLP() {
   const [isLoading, setIsLoading] = useState(false)
+  const [walletAddress, setWalletAddress] = useState("")
+  const [solBalance, setSolBalance] = useState(0)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,6 +28,11 @@ export function NewLP() {
   const handleClearForm = () => {
     const form = document.getElementById("lp-form") as HTMLFormElement
     if (form) form.reset()
+  }
+
+  const handleWalletConnected = (address: string, balance: number) => {
+    setWalletAddress(address)
+    setSolBalance(balance)
   }
 
   return (
@@ -44,21 +51,8 @@ export function NewLP() {
 
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="wallet-address-lp" className="text-green-400">
-            Wallet Address:
-          </Label>
-          <Input id="wallet-address-lp" className="bg-black/50 border-green-500/30 focus:border-green-500 text-white" />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="sol-balance-lp" className="text-green-400">
-            SOL Balance:
-          </Label>
-          <Input
-            id="sol-balance-lp"
-            className="bg-black/50 border-green-500/30 focus:border-green-500 text-white"
-            readOnly
-          />
+          <Label className="text-green-400">Wallet Connection</Label>
+          <WalletConnection onWalletConnected={handleWalletConnected} />
         </div>
 
         <div className="space-y-2">
@@ -141,12 +135,18 @@ export function NewLP() {
         </div>
       </div>
 
-      <Button type="submit" className="w-full bg-green-500 text-black hover:bg-green-600" disabled={isLoading}>
+      <Button
+        type="submit"
+        className="w-full bg-green-500 text-black hover:bg-green-600"
+        disabled={isLoading || !walletAddress}
+      >
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Creating Liquidity Pool...
           </>
+        ) : !walletAddress ? (
+          "Connect Wallet First"
         ) : (
           "Create Liquidity Pool"
         )}
