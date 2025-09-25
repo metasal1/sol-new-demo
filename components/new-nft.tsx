@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { WalletConnection } from "@/components/wallet-connection"
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -13,8 +13,6 @@ export function NewNFT() {
   const [isLoading, setIsLoading] = useState(false)
   const [file, setFile] = useState<File | null>(null)
   const [fileName, setFileName] = useState("No file chosen")
-  const [walletAddress, setWalletAddress] = useState("")
-  const [solBalance, setSolBalance] = useState(0)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -37,15 +35,8 @@ export function NewNFT() {
   const handleClearForm = () => {
     setFile(null)
     setFileName("No file chosen")
-    setWalletAddress("")
-    setSolBalance(0)
     const form = document.getElementById("nft-form") as HTMLFormElement
     if (form) form.reset()
-  }
-
-  const handleWalletConnected = (address: string, balance: number) => {
-    setWalletAddress(address)
-    setSolBalance(balance)
   }
 
   return (
@@ -64,8 +55,24 @@ export function NewNFT() {
 
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label className="text-green-400">Wallet Connection</Label>
-          <WalletConnection onWalletConnected={handleWalletConnected} />
+          <Label htmlFor="wallet-address-nft" className="text-green-400">
+            Wallet Address:
+          </Label>
+          <Input
+            id="wallet-address-nft"
+            className="bg-black/50 border-green-500/30 focus:border-green-500 text-white"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="sol-balance-nft" className="text-green-400">
+            SOL Balance:
+          </Label>
+          <Input
+            id="sol-balance-nft"
+            className="bg-black/50 border-green-500/30 focus:border-green-500 text-white"
+            readOnly
+          />
         </div>
 
         <div className="space-y-2">
@@ -142,18 +149,12 @@ export function NewNFT() {
         </div>
       </div>
 
-      <Button
-        type="submit"
-        className="w-full bg-green-500 text-black hover:bg-green-600"
-        disabled={isLoading || !walletAddress}
-      >
+      <Button type="submit" className="w-full bg-green-500 text-black hover:bg-green-600" disabled={isLoading}>
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Creating NFT...
           </>
-        ) : !walletAddress ? (
-          "Connect Wallet First"
         ) : (
           "Create NFT"
         )}

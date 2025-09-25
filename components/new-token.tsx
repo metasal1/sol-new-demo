@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { WalletConnection } from "@/components/wallet-connection"
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -12,7 +12,7 @@ import { Loader2 } from "lucide-react"
 export function NewToken() {
   const [isLoading, setIsLoading] = useState(false)
   const [walletAddress, setWalletAddress] = useState("")
-  const [solBalance, setSolBalance] = useState(0)
+  const [solBalance, setSolBalance] = useState("")
   const [file, setFile] = useState<File | null>(null)
   const [fileName, setFileName] = useState("No file chosen")
 
@@ -36,16 +36,11 @@ export function NewToken() {
 
   const handleClearForm = () => {
     setWalletAddress("")
-    setSolBalance(0)
+    setSolBalance("")
     setFile(null)
     setFileName("No file chosen")
     const form = document.getElementById("token-form") as HTMLFormElement
     if (form) form.reset()
-  }
-
-  const handleWalletConnected = (address: string, balance: number) => {
-    setWalletAddress(address)
-    setSolBalance(balance)
   }
 
   return (
@@ -64,8 +59,28 @@ export function NewToken() {
 
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label className="text-green-400">Wallet Connection</Label>
-          <WalletConnection onWalletConnected={handleWalletConnected} />
+          <Label htmlFor="wallet-address" className="text-green-400">
+            Wallet Address:
+          </Label>
+          <Input
+            id="wallet-address"
+            value={walletAddress}
+            onChange={(e) => setWalletAddress(e.target.value)}
+            className="bg-black/50 border-green-500/30 focus:border-green-500 text-white"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="sol-balance" className="text-green-400">
+            SOL Balance:
+          </Label>
+          <Input
+            id="sol-balance"
+            value={solBalance}
+            onChange={(e) => setSolBalance(e.target.value)}
+            className="bg-black/50 border-green-500/30 focus:border-green-500 text-white"
+            readOnly
+          />
         </div>
 
         <div className="space-y-2">
@@ -174,18 +189,12 @@ export function NewToken() {
         </div>
       </div>
 
-      <Button
-        type="submit"
-        className="w-full bg-green-500 text-black hover:bg-green-600"
-        disabled={isLoading || !walletAddress}
-      >
+      <Button type="submit" className="w-full bg-green-500 text-black hover:bg-green-600" disabled={isLoading}>
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Creating Token...
           </>
-        ) : !walletAddress ? (
-          "Connect Wallet First"
         ) : (
           "Create Token"
         )}

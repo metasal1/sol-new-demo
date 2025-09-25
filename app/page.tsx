@@ -1,5 +1,6 @@
 "use client"
 import Link from "next/link"
+import Image from "next/image"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { NewToken } from "@/components/new-token"
 import { NewNFT } from "@/components/new-nft"
@@ -12,13 +13,14 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <header className="container mx-auto py-6 flex justify-between items-center">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <Image src="/logo.png" alt="sol.new logo" width={48} height={48} className="w-12 h-12" />
           <h1 className="text-3xl font-bold text-green-400">sol.new</h1>
         </div>
         <h2 className="text-xl font-medium text-green-400">just coin it</h2>
         <div className="flex gap-4">
           <Link href="https://solana.com" target="_blank">
-            <Button variant="outline" className="border-green-500 text-green-400 hover:bg-green-500/10">
+            <Button variant="outline" className="border-green-500 text-green-400 hover:bg-green-500/10 bg-transparent">
               Learn More
             </Button>
           </Link>
@@ -70,11 +72,14 @@ export default function Home() {
             <Link href="https://metasal.xyz" className="hover:text-green-400">
               metasal.xyz
             </Link>
-            <Link href="#" className="hover:text-green-400">
-              Terms
-            </Link>
-            <Link href="#" className="hover:text-green-400">
+            <Link href="/privacy" className="hover:text-green-400">
               Privacy
+            </Link>
+            <Link href="/copyright" className="hover:text-green-400">
+              Copyright
+            </Link>
+            <Link href="/license" className="hover:text-green-400">
+              License
             </Link>
           </div>
         </div>
